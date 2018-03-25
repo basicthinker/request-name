@@ -40,7 +40,7 @@ namespace econSOAPExample
                 //session.ConnectAsAdministrator(ADMINAGREEMENT, "ADMINUSER", "PASS", ENDUSERAGREEMENT);
 
                 // Connect with token
-                session.ConnectWithToken("AGREEMENTGRANTTOKEN","APPSECRETTOKEN");
+                session.ConnectWithToken("uveDMwKpURdJ3HikednSkDd42OO83xSAJim2IhvWKuI1", "smO8ZM4NWiJCvb0Ls20cCMnWPn3BsOhj4kNDLBExjBI1");
             }
         }
 
