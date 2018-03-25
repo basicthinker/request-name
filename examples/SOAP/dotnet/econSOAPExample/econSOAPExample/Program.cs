@@ -39,8 +39,8 @@ namespace econSOAPExample
                 // Connect as administrator
                 //session.ConnectAsAdministrator(ADMINAGREEMENT, "ADMINUSER", "PASS", ENDUSERAGREEMENT);
 
-                // Connect with token
-                session.ConnectWithToken("uveDMwKpURdJ3HikednSkDd42OO83xSAJim2IhvWKuI1", "smO8ZM4NWiJCvb0Ls20cCMnWPn3BsOhj4kNDLBExjBI1");
+                // Connect with token  
+                session.ConnectWithToken("rJiD2Hm8iD3iWG0xNGTQ1o7w7FuHrI2SH0Yiz1dH81E1", "uveDMwKpURdJ3HikednSkDd42OO83xSAJim2IhvWKuI1");
             }
         }
 
