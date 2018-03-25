@@ -54,7 +54,12 @@ namespace econSOAPExample
                 var companyHandle = session.Company_Get();
                 var companyData = session.Company_GetData(companyHandle);
 
+                var projectHandle = session.Project_FindByNumber(1844);
+                var timeEntriesData = session.Project_GetTimeEntries(projectHandle);
+
                 Console.WriteLine(companyData.Name);
+                Console.WriteLine();
+
 
                 Console.WriteLine("Disconnecting");
                 session.Disconnect();
