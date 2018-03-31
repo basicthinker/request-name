@@ -59,7 +59,7 @@ namespace econSOAPExample
 
 
 
-                //Fetch employees
+                //Fetch and loop employees
                 var employeeHandles = session.Employee_GetAll();
                 foreach (EmployeeHandle employee in employeeHandles)
                 {
@@ -75,6 +75,7 @@ namespace econSOAPExample
                     DateTime toDate = DateTime.Parse("31.12.2012");
 
 
+                    //Loop time entries for the particular employee
                     foreach (TimeEntryData timeEntryData in timeEntryDataArr)
                     {
                         //Get activity data (To ananlyze productive or unproductive time)
