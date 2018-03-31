@@ -27,7 +27,7 @@ namespace econSOAPExample
             // A necessary setting as the session is put in a cookie
             ((BasicHttpBinding)session.Endpoint.Binding).AllowCookies = true;
 
-            
+
             using (new OperationContextScope(session.InnerChannel))
             {
                 //Setting the X-EconomicAppIdentifier HTTP Header. Only required for ConnectAsAdministrator.
@@ -40,9 +40,10 @@ namespace econSOAPExample
                 //session.ConnectAsAdministrator(ADMINAGREEMENT, "ADMINUSER", "PASS", ENDUSERAGREEMENT);
 
                 // Connect with token  
-                session.ConnectWithToken("rJiD2Hm8iD3iWG0xNGTQ1o7w7FuHrI2SH0Yiz1dH81E1", "uveDMwKpURdJ3HikednSkDd42OO83xSAJim2IhvWKuI1");
+                session.ConnectWithToken("DCsTo8OiHmZOEi2z3nCL4UIGgTHEMFODyDhLgf6hBDY1", "uveDMwKpURdJ3HikednSkDd42OO83xSAJim2IhvWKuI1");
             }
         }
+
 
         public static void PrintCompanyName()
         {
@@ -56,8 +57,6 @@ namespace econSOAPExample
 
                 Console.WriteLine(companyData.Name);
 
-                var projectHandle = session.Project_FindByNumber(1844);
-                var timeEntriesData = session.Project_GetTimeEntries(projectHandle);
 
 
                 //Fetch employees
@@ -65,22 +64,55 @@ namespace econSOAPExample
                 foreach (EmployeeHandle employee in employeeHandles)
                 {
                     var employeeData = session.Employee_GetData(employee);
+                    //Console.WriteLine(employeeData.Name + " CostPrice=" + employeeData.CostPrice + " SalesPrice=" + employeeData.SalesPrice);
+                    var timeEntries = session.Employee_GetTimeEntries(employee);
+                    var timeEntryDataArr = session.TimeEntry_GetDataArray(timeEntries);
+                    decimal employeeHourSum = 0;
+                    decimal employeeCostSum = 0;
+                    decimal employeeSalesSum = 0;
+                    decimal employeeEarnedSum = 0;
+                    DateTime fromDate = DateTime.Parse("01.01.2011");
+                    DateTime toDate = DateTime.Parse("31.12.2012");
+
+
+                    foreach (TimeEntryData timeEntryData in timeEntryDataArr)
+                    {
+                        //Get activity data (To ananlyze productive or unproductive time)
+                        //var timeActivityHandle = timeEntryData.ActivityHandle;
+                        //var timeActivityData = session.Activity_GetData(timeActivityHandle);
+                        //Console.WriteLine("Activity=" + timeActivityData.Name + " number=" + timeActivityData.Number);
+
+                        
+                        //Filter on date interval
+                        var res1 = timeEntryData.Date.CompareTo(fromDate);
+                        var res2 = timeEntryData.Date.CompareTo(toDate);
+                        if (res1 > 0 & res2 < 0)
+                        {
+                            //Sum data
+                            employeeHourSum = employeeHourSum + timeEntryData.NumberOfHours;
+                            employeeCostSum = employeeCostSum + timeEntryData.CostPrice * timeEntryData.NumberOfHours;
+                            employeeSalesSum = employeeSalesSum + timeEntryData.SalesPrice * timeEntryData.NumberOfHours;
+                            employeeEarnedSum = employeeSalesSum - employeeCostSum;
+
+                        }
+
+                        //Console.WriteLine(timeEntryData.Date + ":" + timeEntryData.NumberOfHours + " " + timeEntryData.SalesPrice + " " + timeEntryData.Text);
+                    }
+
+
+                    Console.WriteLine(employeeData.Name + " \t TimeregHours=" + employeeHourSum + " \t Cost=" + employeeCostSum + " \t Sales=" + employeeSalesSum + " \t Earned=" + employeeEarnedSum);
+
+
                     if (employeeData.EmployeeType == EmployeeType.TimeLogger)
                     {
-                        Console.WriteLine(employeeData.Name + " CostPrice=" + employeeData.CostPrice + " SalesPrice=" + employeeData.SalesPrice);
-                        var timeEntries = session.Employee_GetTimeEntries(employee);
-                        foreach (TimeEntryHandle timeEntry in timeEntries)
-                        {
-                            var timeEntryData = session.TimeEntry_GetData(timeEntry);
-                            Console.WriteLine(timeEntryData.NumberOfHours + " " +timeEntryData.SalesPrice + " " + timeEntryData.Text);
-                        }
-                    }
-                  
 
-                    
+                    }
+
+
+
                 }
 
-                
+
 
 
                 Console.WriteLine("Disconnecting");
